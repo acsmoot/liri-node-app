@@ -1,0 +1,24 @@
+{
+  "name": "request",
+  "version": "1.0.0",
+  "description": "App leads you to movies, concerts, and songs",
+  "main": "liri.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/acsmoot/liri-node-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/acsmoot/liri-node-app/issues"
+  },
+  "homepage": "https://github.com/acsmoot/liri-node-app#readme",
+  "dependencies": {
+    "dotenv": "^6.1.0",
+    "moment": "^2.22.2",
+    "node-spotify-api": "^1.0.7"
+  }
+}
