@@ -24,7 +24,6 @@ function getSearchString(liriInput) {
     return tempName;
 }
 
-
 let searchString = getSearchString(liriInput);
 
 switch (liriCommand) {
@@ -35,7 +34,7 @@ switch (liriCommand) {
     //  4 -  `do-what-it-says`
     case `spotify-this-song`:
         console.log(`node liri.js spotify-this-song '<songName here>'`);
-        //REMEMBER THE DEFAULT        
+        //REMEMBER THE DEFAULT
         spotifyThis(searchString);
         break;
     case `movie-this`:
@@ -47,7 +46,7 @@ switch (liriCommand) {
         break;
     case `concert-this`:
         console.log(`node liri.js concert-this <artistbandName here>`);
-        concertThisAlso(searchString);
+        concertThis(searchString);
         break;
     case `do-what-it-says`:
         console.log(`node liri.js do-what-it-says`);
@@ -60,17 +59,55 @@ switch (liriCommand) {
 
 function concertInfoDisplay(body) {
     //  artistBands Output
-    //   * Venue Name
-    console.log("Venue Name " + JSON.parse(body).offer);
-    //   * Venue location
-    //   console.log("Venue location" + JSON.parse(body).venue);
-    //   console.log("Venue location" + JSON.parse(body).venue);
-    //   * Event Date (use moment to format this as "MM/DD/YYYY")
-    //   console.log("Event Date " + JSON.parse(body).datetime);
+    const data = JSON.parse(body);
+    const targetObj = data[0];
 
-};
+    //   * Venue Name
+    console.log("Venue Name: " + data[0].venue.name);
+    //   * Venue location
+    //   {"name":"The Mirage","country":"United States","region":"NV","city":"Las Vegas",
+    console.log(
+        "Venue location: " +
+        data[0].venue.city +
+        ", " +
+        data[0].venue.region +
+        " " +
+        data[0].venue.country
+    );
+    //   * Event Date (use moment to format this as "MM/DD/YYYY")
+    console.log("Event Date: " + data[0].datetime);
+}
 
 function concertThis(artistbandName) {
+    console.log("`node liri.js concert-this <artist/band name here>`");
+
+    const bandKeys = keys.apiInfo;
+    const bandapp_ID = bandKeys.bandapp_ID;
+
+    var options = {
+        method: "GET",
+        url: "https://rest.bandsintown.com/artists/" + artistbandName + "/events",
+        qs: {
+            app_id: bandapp_ID
+        },
+        headers: {
+            "cache-control": "no-cache"
+        }
+    };
+
+    console.log("concert url ==> " + options.url);
+
+    request(options, function (error, response, body) {
+        if (error) throw new Error(error);
+
+        // console.log("Pretty Version Output" + JSON.stringify(body));
+
+        // console.log("THE BODY IS ==> " + body);
+        concertInfoDisplay(body);
+    });
+}
+
+function concertThisAlso(artistbandName) {
     // `node liri.js concert-this <artist/band name here>`
     console.log("`node liri.js concert-this <artist/band name here>`");
 
@@ -78,83 +115,63 @@ function concertThis(artistbandName) {
     // * This will search the Bands in Town Artist Events API
     // (`"https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp"`) for an artist and render the following information about each event to the terminal:
     const bandsUri = "https://rest.bandsintown.com/artists/";
-    let bandsBackUri = "/events?app_id=";
+    const bandsBackUri = "/events?app_id=";
 
-    let bandKeys = keys.apiInfo;
-    let bandapp_ID = bandKeys.bandapp_ID;
+    const bandKeys = keys.apiInfo;
+    const bandapp_ID = bandKeys.bandapp_ID;
 
-    let artistBandsURL = bandsUri + artistbandName + bandsBackUri + bandapp_ID;
+    const artistBandsURL = bandsUri + artistbandName + bandsBackUri + bandapp_ID;
+
     console.log("artistBandsURL: " + artistBandsURL);
 
     request(artistBandsURL, function (error, response, body) {
         console.log("RESPONSE: " + JSON.stringify(response));
         if (!error && response.statusCode === 200) {
-            // console.log("Pretty Version Output" + JSON.stringify(response));
+            console.log("Pretty Version Output" + JSON.stringify(response));
             // concertInfoDisplay(response.body);
             console.log("Venue Name " + response.venue);
-
         } else {
             console.log(error);
         }
     });
 }
 
-function concertThisAlso(artistbandName) {
-
-    var options = {
-        method: 'GET',
-        url: 'https://rest.bandsintown.com/artists/' + artistbandName + '/events',
-        qs: {
-            app_id: 'codingbootcamp'
-        },
-        headers: {
-            'cache-control': 'no-cache'
-        }
-    };
-    request(options, function (error, response, body) {
-        if (error) throw new Error(error);
-
-        console.log(body);
-    });
-
-}
-
 function spotifyDisplayInfo(body) {
     console.log("spotifyDisplayInfo inside the function");
+
+    const info = JSON.parse(body);
+    const spotObj = info[0];
+    // console.log("spotObj: " + spotObj);
+    // `console.log("spotifyOutput: " + JSON.stringify(spotObj));
+
     // OUTPUT DATA
     //    * This will show the following information about the song in your terminal/bash window
     //      * Artist(s)
-    console.log("Artist(s): " + JSON.parse(body).name);
+    //   console.log("Artist(s): " + JSON.parse(body).name);
     //      * Song Name
-    console.log("Song Name: " + JSON.parse(body).name);
+    //   console.log("Song Name: " + JSON.parse(body).name);
     //      * The album that the song is from
-    console.log("Album: " + JSON.parse(body).name);
+    //   console.log("Album: " + JSON.parse(body).name);
     //      * A preview link of the song from Spotify
-    console.log("Preview Link: " + JSON.parse(body).preview_url);
-
-};
+    //   console.log("Preview Link: " + JSON.parse(body).preview_url);
+}
 
 function spotifyThis(trackName) {
     console.log("`node liri.js spotify-this-song '<song name here>`");
-
     console.log("trackName :" + trackName);
-    //   request(options, function(error, response, data) {
-    //     if (error) throw new Error(error);
 
-    //     console.log(data);
-    //   });
-    ////////////////////////////////////
     //   let qs = { type: 'artist' || 'album' || 'track', query: trackName, limit: 10 };
-
-    let qs = {
+    const qs = {
         type: "track",
         query: trackName,
-        limit: 10
+        limit: 2
     };
 
-    let spotSecret = spotifyKeys.secret;
+    const spotKeys = keys.spotify;
+    const spotSecret = spotKeys.secret;
+    const spotID = spotKeys.id;
 
-    let spotify = new Spotify({
+    const spotify = new Spotify({
         id: spotID,
         secret: spotSecret
     });
@@ -164,6 +181,7 @@ function spotifyThis(trackName) {
             return console.log("Error occurred: " + err);
         }
         console.log("Pretty Version Output" + JSON.stringify(data));
+        spotifyDisplayInfo(data);
     });
 
     // ADDITIONAL INFO -- TO BE DELETED
@@ -208,7 +226,6 @@ function movieThis(movieName) {
 
     request(queryUrl, function (error, response, body) {
         if (!error && response.statusCode === 200) {
-
             console.log("Pretty Version Output" + JSON.stringify(body));
 
             movieInfoDisplay(body);
