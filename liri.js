@@ -7,6 +7,7 @@ const fs = require("fs"); //dowhat
 const Spotify = require("node-spotify-api"); //spotify
 const keys = require("./keys.js");
 
+
 const liriInput = process.argv;
 getLiriArtifacts(liriInput);
 
@@ -24,13 +25,6 @@ function getLiriArtifacts(inputString) {
   }
 
   liriCommand += input[0];
-
-  // if ((isNaN(searchString) || searchString === undefined || searchString === null || searchString.indexOf(' ') >= 0) && liriCommand === 'movie-this'){
-  //     startLiriBot(liriCommand.trim(),getSearchString("Mr. Nobdy"));
-  // }
-  // if ((isNaN(searchString) || searchString === undefined || searchString === null || searchString.indexOf(' ') >= 0)&& liriCommand === 'spotify-this-song'){
-  //     startLiriBot(liriCommand.trim(),getSearchString("The Sign"));
-  // }
 
   console.log("liriCommand in function " + liriCommand);
   console.log("searchstring " + searchString);
