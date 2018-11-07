@@ -18,7 +18,9 @@
   "homepage": "https://github.com/acsmoot/liri-node-app#readme",
   "dependencies": {
     "dotenv": "^6.1.0",
+    "ejs": "^2.6.1",
     "moment": "^2.22.2",
     "node-spotify-api": "^1.0.7"
-  }
+  },
+  "devDependencies": {}
 }

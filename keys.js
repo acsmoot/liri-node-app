@@ -1,6 +1,4 @@
-//
-console.log("The keys are now loaded");
-
+// console.log("The keys are now loaded");
 // api calls
 // load into the liri.js file
 
