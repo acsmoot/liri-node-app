@@ -23,3 +23,4 @@ Search OMDB about the movie you enter the terminal/bash window
  4 - `do-what-it-says
 Enter in the Terminal/bash command -- node liri.js do-what-it-says
 
+See slideShow\LiriBot_Large.mp4
